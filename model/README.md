@@ -2,7 +2,9 @@
 language:
 - en
 - fr
-license: lfm1.0
+license: other
+license_name: lfm-open-license-v1.0
+license_link: https://huggingface.co/LiquidAI/LFM3-1.7B/blob/main/LICENSE
 library_name: transformers
 base_model: OpenIntelligenceNet/LFM3-1.7B-Uncensored
 base_model_relation: finetune

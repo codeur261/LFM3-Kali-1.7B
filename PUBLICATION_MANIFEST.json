@@ -11,8 +11,8 @@
   },
   {
     "path": "model/README.md",
-    "bytes": 5951,
-    "sha256": "1cf983a1c47cd21c7cf603924d8247372ed5564ae027b98742a1d2476a9dfa02"
+    "bytes": 6060,
+    "sha256": "b596e398df128b49385e74d87d7bbcbeed7c7bf9f9351325a1412c6f0ff10bac"
   },
   {
     "path": "model/chat_template.jinja",
@@ -86,8 +86,8 @@
   },
   {
     "path": "adapter/README.md",
-    "bytes": 6063,
-    "sha256": "81bdb1fa95c0b7b7eed08b90621a80338e572e91ba7c952712e27ff9ba2e097e"
+    "bytes": 6172,
+    "sha256": "85fe3a8ae0010a3737564260ea5f78b4c644bc562d4f09f950eb02241ebf0def"
   },
   {
     "path": "adapter/adapter_config.json",
@@ -126,8 +126,8 @@
   },
   {
     "path": "training/adapter/README.md",
-    "bytes": 6063,
-    "sha256": "81bdb1fa95c0b7b7eed08b90621a80338e572e91ba7c952712e27ff9ba2e097e"
+    "bytes": 6172,
+    "sha256": "85fe3a8ae0010a3737564260ea5f78b4c644bc562d4f09f950eb02241ebf0def"
   },
   {
     "path": "training/adapter/adapter_config.json",

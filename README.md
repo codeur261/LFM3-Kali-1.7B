@@ -10,7 +10,7 @@ LFM3-Kali-1.7B est un projet d'adaptation d'un modèle de langage de 1,7 milliar
 
 La version **v0.1.0** est disponible pour une utilisation locale, des évaluations et des contributions. Elle reste expérimentale : ses performances dépendent des outils, du moteur d'inférence et des tâches confiées.
 
-[Fiche du modèle](MODEL_CARD.md) · [Contribuer](CONTRIBUTING.md) · [Publication Hugging Face](PUBLISH_HUGGINGFACE.md)
+[Modèle sur Hugging Face](https://huggingface.co/aheshman/LFM3-Kali-1.7B) · [Fiche du modèle](MODEL_CARD.md) · [Contribuer](CONTRIBUTING.md) · [Publication Hugging Face](PUBLISH_HUGGINGFACE.md)
 
 ## Présentation
 
