@@ -8,7 +8,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-REPO = "iamarketings/LFM3-Kali-1.7B"
+REPO = "codeur261/LFM3-Kali-1.7B"
 BASE = "OpenIntelligenceNet/LFM3-1.7B-Uncensored"
 REVISION = "8e7cf5cccd95afa9d34a3a66ebfb8fef1b55c204"
 RUN = Path("/content/drive/MyDrive/LFM3_Kali_Finetune/run_20261105_v1")
@@ -27,7 +27,9 @@ def prepare():
     if not (RUN / "adapter" / "adapter_model.safetensors").is_file():
         raise FileNotFoundError("L'adaptateur entraîné manque ; aucune relance d'entraînement automatique.")
     if not EXPORT.exists():
-        command("git", "clone", f"https://github.com/{REPO}.git", str(EXPORT))
+        env = dict(os.environ, GIT_LFS_SKIP_SMUDGE="1")
+        command("git", "clone", f"https://github.com/{REPO}.git", str(EXPORT), env=env)
+    command("git", "remote", "set-url", "origin", f"https://github.com/{REPO}.git", cwd=EXPORT)
     shutil.copytree(RUN, EXPORT / "training", dirs_exist_ok=True)
     shutil.copytree(RUN / "adapter", EXPORT / "adapter", dirs_exist_ok=True)
     source = Path("/content/lfm3_cyber_ft")
@@ -40,6 +42,10 @@ def prepare():
         config["revision"] = REVISION
         (path / "adapter_config.json").write_text(json.dumps(config, indent=2) + "\n")
 
+    for folder in (EXPORT / "adapter", EXPORT / "training" / "adapter"):
+        shutil.copy2(EXPORT / "MODEL_CARD.md", folder / "README.md")
+        shutil.copy2(EXPORT / "LICENSE-LFM", folder / "LICENSE")
+
     merged_dir = EXPORT / "model"
     if not (merged_dir / "EXPORT_COMPLETE.json").is_file():
         print("Fusion des poids appris dans la base originale FP16, sans réentraînement…", flush=True)
@@ -51,13 +57,11 @@ def prepare():
         merged = trained.merge_and_unload(safe_merge=True)
         merged.config.use_cache = True
         merged.save_pretrained(merged_dir, safe_serialization=True, max_shard_size="1GB")
-        tokenizer = AutoTokenizer.from_pretrained(BASE, revision=REVISION, token=False)
+        tokenizer = AutoTokenizer.from_pretrained(BASE, revision=REVISION, trust_remote_code=True, token=False)
         tokenizer.save_pretrained(merged_dir)
-        card = (EXPORT / "MODEL_CARD.md").read_text()
-        card = card.replace("base_model_relation: adapter", "base_model_relation: finetune")
-        card = card.replace("library_name: peft", "library_name: transformers")
-        card += "\n\nCe sous-dossier contient le modèle complet fusionné en FP16. Les adaptateurs d'origine restent disponibles dans ../adapter.\n"
-        (merged_dir / "README.md").write_text(card)
+        # La fiche du modèle fusionné est maintenue séparément de la fiche PEFT.
+        if not (merged_dir / "README.md").is_file():
+            raise FileNotFoundError("Fiche model/README.md absente de la source de publication.")
         shutil.copy2(EXPORT / "LICENSE-LFM", merged_dir / "LICENSE")
         (merged_dir / "EXPORT_COMPLETE.json").write_text(json.dumps({
             "base_model": BASE, "base_revision": REVISION,
@@ -67,17 +71,8 @@ def prepare():
         del merged, trained, base
         torch.cuda.empty_cache()
 
-    files = []
-    for top in ("model", "adapter", "training"):
-        for path in sorted((EXPORT / top).rglob("*")):
-            if path.is_file():
-                digest = hashlib.sha256()
-                with path.open("rb") as stream:
-                    for block in iter(lambda: stream.read(8 * 1024 * 1024), b""):
-                        digest.update(block)
-                files.append({"path": str(path.relative_to(EXPORT)), "bytes": path.stat().st_size,
-                              "sha256": digest.hexdigest()})
-    (EXPORT / "PUBLICATION_MANIFEST.json").write_text(json.dumps(files, indent=2) + "\n")
+    from refresh_manifest import refresh
+    files = refresh(EXPORT)
     print(f"Prêt : {len(files)} fichiers, {sum(x['bytes'] for x in files)/1e9:.2f} Go", flush=True)
     for folder in ("model", "adapter", "training"):
         print(folder, sum(x["bytes"] for x in files if x["path"].startswith(folder + "/")), "octets", flush=True)
@@ -89,7 +84,7 @@ def push(token=None):
     if not (EXPORT / "PUBLICATION_MANIFEST.json").exists():
         raise RuntimeError("Exécuter prepare() avant push().")
     token = token or os.environ.get("GITHUB_TOKEN") or getpass.getpass(
-        "Jeton GitHub pour iamarketings/LFM3-Kali-1.7B (Contents: Read and write) : ")
+        "Jeton GitHub pour codeur261/LFM3-Kali-1.7B (Contents: Read and write) : ")
     if not token:
         raise ValueError("Aucun jeton saisi. Aucun push effectué.")
     # Jeton éphémère en mémoire ; aucune écriture dans l'URL distante ni dans Git.
@@ -102,8 +97,8 @@ def push(token=None):
         # Les checkpoints et shards sont des fichiers réels dans ce même dépôt ;
         # Git LFS transporte les gros binaires sans limite Git de 100 Mo.
         command("git", "lfs", "track", "*.safetensors", "*.bin", "*.pt", "*.pth", cwd=EXPORT)
-        command("git", "config", "user.name", "iamarketings", cwd=EXPORT)
-        command("git", "config", "user.email", "186750009+iamarketings@users.noreply.github.com", cwd=EXPORT)
+        command("git", "config", "user.name", "codeur261", cwd=EXPORT)
+        command("git", "config", "user.email", "186750009+codeur261@users.noreply.github.com", cwd=EXPORT)
         command("git", "add", "-f", "model", "adapter", "training", "PUBLICATION_MANIFEST.json", ".gitattributes", cwd=EXPORT)
         staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=EXPORT).returncode
         if staged:

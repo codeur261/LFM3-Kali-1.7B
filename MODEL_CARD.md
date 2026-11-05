@@ -26,6 +26,20 @@ Base : `OpenIntelligenceNet/LFM3-1.7B-Uncensored`, révision immuable
 Les modifications apprises sont distribuées dans `adapter_model.safetensors`.
 La licence du modèle d'origine, LFM Open License v1.0, reste applicable.
 
+## Usage prévu
+
+Le modèle s'adresse aux professionnels de la cybersécurité pour les laboratoires, les CTF et les audits de sécurité autorisés. Il peut assister la préparation de commandes, l'analyse technique et le travail avec les outils disponibles dans l'environnement. Les commandes proposées doivent être vérifiées avant exécution ; leur utilisation relève de la responsabilité de l'opérateur.
+
+### Kali Linux et Windows / WSL
+
+L'assistant peut être utilisé avec les outils installés sous Kali Linux, ou sous Windows via WSL avec une distribution Linux et les outils nécessaires. Le modèle et le moteur d'inférence produisent les réponses ; l'exécution dépend de l'interface ou du harness qui les relie au système. Les fonctions nécessitant un accès direct au matériel, notamment certains usages Wi-Fi, dépendent des interfaces et des pilotes accessibles dans WSL.
+
+### Retours d'utilisation locale
+
+Le mainteneur rapporte des essais de sécurité et d'intrusion sur un **HP Gbook 15, processeur Xeon, 4 Go de VRAM et 32 Go de RAM**. Dans cet environnement, il constate que le modèle suit les tâches testées et répond aux besoins de son flux de travail, avec des points à améliorer. Ces essais de terrain complètent les comparaisons Colab ; les traces détaillées, versions du backend, quantification et mesures de débit ne sont pas encore publiées.
+
+Une fenêtre de contexte de **64K tokens (65 536)** est retenue comme suffisante pour le flux de travail décrit par le mainteneur. Ce réglage concerne l'inférence et la gestion du cache KV. Il ne garantit pas que 64K tokens remplis tiennent intégralement dans 4 Go de VRAM : la mémoire réellement utilisée dépend du backend, de la quantification du cache, de l'offload vers la RAM et de la longueur occupée. La configuration du modèle autorise jusqu'à 262 144 positions ; la limite de 1 536 tokens utilisée pendant le fine-tuning n'est pas sa limite d'inférence.
+
 ## Données et paramètres
 
 | Source | Entraînement |
@@ -53,7 +67,7 @@ d'explications. La version v0.1.0 reste à évaluer et améliorer.
 
 MSF est peu représenté : pas de parcours pratique de msfconsole/msfvenom.
 Le corpus n'enseigne pas de boucle complète d'exécution et de retour d'outil.
-Les commandes générées pendant les tests n'ont pas été exécutées.
+Les commandes des comparaisons qualitatives Colab n'ont pas été exécutées ; les essais locaux rapportés par le mainteneur relèvent d'un protocole distinct.
 Aucun corpus de refus n'a été ajouté ; aucun comportement sans refus n'est garanti.
 
 ## Recharger sans entraîner
@@ -65,7 +79,7 @@ from peft import PeftModel
 
 BASE = "OpenIntelligenceNet/LFM3-1.7B-Uncensored"
 REV = "8e7cf5cccd95afa9d34a3a66ebfb8fef1b55c204"
-ADAPTER = "./adapter"  # ou TON_PSEUDO/LFM3-Kali-1.7B sur Hugging Face
+ADAPTER = "./adapter"  # Chemin local ; un dépôt HF publié peut également être utilisé.
 tokenizer = AutoTokenizer.from_pretrained(ADAPTER)
 base = AutoModelForCausalLM.from_pretrained(
     BASE, revision=REV, trust_remote_code=True,
@@ -89,7 +103,7 @@ print(tokenizer.decode(result[0, inputs.input_ids.shape[1]:], skip_special_token
 
 Environnement utilisé : torch 2.11.0, transformers 5.20.2, peft 0.21.2,
 accelerate 1.15.0, bitsandbytes 0.50.2. Dépôt du code et des sources :
-https://github.com/iamarketings/LFM3-Kali-1.7B
+https://github.com/codeur261/LFM3-Kali-1.7B
 
 Sources : RISys-Lab/KaliBench (CC BY 4.0), hotdogs/cyber-sft-agent-qwen38
 (Apache 2.0), tmylla/HackMentor (dépôt Apache 2.0). Les révisions, empreintes

@@ -8,7 +8,7 @@ import shutil
 from pathlib import Path
 
 
-def publish(adapter_dir, repo_id=None, token=None):
+def publish(adapter_dir, repo_id=None, token=None, private=True):
     from huggingface_hub import HfApi
 
     adapter_dir = Path(adapter_dir)
@@ -33,7 +33,7 @@ def publish(adapter_dir, repo_id=None, token=None):
         (staging / "adapter_config.json").write_text(json.dumps(config, indent=2) + "\n")
         shutil.copy2(card, staging / "README.md")
         shutil.copy2(license_path, staging / "LICENSE")
-        api.create_repo(repo_id=repo_id, repo_type="model", private=False, exist_ok=True)
+        api.create_repo(repo_id=repo_id, repo_type="model", private=private, exist_ok=True)
         commit = api.upload_folder(repo_id=repo_id, repo_type="model", folder_path=str(staging),
                                    commit_message="Publish trained LFM3 Kali QLoRA adapter v0.1.0")
     print(f"Publié : https://huggingface.co/{repo_id}")
@@ -45,5 +45,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--adapter", required=True)
     parser.add_argument("--repo-id")
+    parser.add_argument("--public", action="store_true", help="Créer un nouveau dépôt public ; privé par défaut.")
     args = parser.parse_args()
-    publish(args.adapter, args.repo_id)
+    publish(args.adapter, args.repo_id, private=not args.public)

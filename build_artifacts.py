@@ -60,3 +60,8 @@ with zipfile.ZipFile(bundle, "w", compression=zipfile.ZIP_DEFLATED, compressleve
             archive.write(item, "data/" + item.name)
 print(json.dumps({"notebook": str(path), "notebook_bytes": path.stat().st_size,
                   "bundle": str(bundle), "bundle_bytes": bundle.stat().st_size, "cells": len(notebook["cells"])}, indent=2))
+
+# Le manifeste concerne les artefacts publiés, y compris les pointeurs Git LFS.
+if any((ROOT / name).is_dir() for name in ("model", "adapter", "training")):
+    from refresh_manifest import refresh
+    refresh(ROOT)

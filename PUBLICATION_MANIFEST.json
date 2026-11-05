@@ -11,8 +11,8 @@
   },
   {
     "path": "model/README.md",
-    "bytes": 4163,
-    "sha256": "315cf2f18ef4f176f4c649a06f28ed7f3e94263acfaa73b3d6aa8162c87b9047"
+    "bytes": 5996,
+    "sha256": "84bbd7f4cbb2ac4fb495717294480cf771cf75f5b3e50186e44975e4a3edeebb"
   },
   {
     "path": "model/chat_template.jinja",
@@ -80,9 +80,14 @@
     "sha256": "830d3516c58022acf95ec58fc095da4cc2501745bcf7df8fa1f0d5a2bb380593"
   },
   {
+    "path": "adapter/LICENSE",
+    "bytes": 10574,
+    "sha256": "4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c"
+  },
+  {
     "path": "adapter/README.md",
-    "bytes": 5234,
-    "sha256": "1f69fa61ae3d5d796303f655f7c1625e616fee8496bb7a7d5dddcb444f729aca"
+    "bytes": 6108,
+    "sha256": "e94f3710c0f4503d8a7d6b7a1573440b29356608efb673bb5265fa05a5faf9a5"
   },
   {
     "path": "adapter/adapter_config.json",
@@ -115,9 +120,14 @@
     "sha256": "935df668a56892e4450e7ae683bf0593c56eaf18cc3d60b49531b2999fcc6a23"
   },
   {
+    "path": "training/adapter/LICENSE",
+    "bytes": 10574,
+    "sha256": "4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c"
+  },
+  {
     "path": "training/adapter/README.md",
-    "bytes": 5234,
-    "sha256": "1f69fa61ae3d5d796303f655f7c1625e616fee8496bb7a7d5dddcb444f729aca"
+    "bytes": 6108,
+    "sha256": "e94f3710c0f4503d8a7d6b7a1573440b29356608efb673bb5265fa05a5faf9a5"
   },
   {
     "path": "training/adapter/adapter_config.json",

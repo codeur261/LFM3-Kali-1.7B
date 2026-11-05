@@ -4,14 +4,10 @@ __pycache__/
 .env.*
 *.token
 *token*.txt
-raw/
-references/
-checkpoints/
-adapter/
-merged/
-*.safetensors
+/references/
+/merged/
 *.gguf
-*.pt
-*.bin
 *.zip
 *.tar.gz
+# model/, adapter/ et training/ sont publiés volontairement.
+# Les poids et états binaires sont gérés par .gitattributes / Git LFS.
