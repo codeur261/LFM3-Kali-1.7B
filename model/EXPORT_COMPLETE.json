@@ -1,0 +1,7 @@
+{
+  "base_model": "OpenIntelligenceNet/LFM3-1.7B-Uncensored",
+  "base_revision": "8e7cf5cccd95afa9d34a3a66ebfb8fef1b55c204",
+  "source_adapter_sha256": "3b9502bfe36d1cb829d3122edf1c19000dbdb817390252a8ce535b83038cc53f",
+  "format": "merged-fp16-safetensors",
+  "max_shard_size": "1GB"
+}

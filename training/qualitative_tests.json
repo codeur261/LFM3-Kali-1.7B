@@ -1,0 +1,27 @@
+[
+  {
+    "question": "Affiche la version de Nmap.",
+    "base": "<tool_call>\n<function=run_shell>\n<parameter=command>\nnmap --version\n</parameter>\n</function>\n</tool_call>",
+    "fine_tuned": "<tool_call>\n<function=run_shell>\n<parameter=command>\nnmap -sV --version\n</parameter>\n</function>\n</tool_call>"
+  },
+  {
+    "question": "Avec Nmap, fais un scan TCP connect des ports 22,80,443 de 192.0.2.30 et affiche seulement les ports ouverts.",
+    "base": "<tool_call>\n<function=run_shell>\n<parameter=command>\nnmap -p 22,80,443 192.0.2.30 --script open\n</parameter>\n</function>\n</tool_call>",
+    "fine_tuned": "<tool_call>\n<function=run_shell>\n<parameter=command>\nnmap -sT --open -p 22,80,443 192.0.2.30\n</parameter>\n</function>\n</tool_call>"
+  },
+  {
+    "question": "Affiche les en-têtes HTTP de http://service.test/ avec curl.",
+    "base": "<tool_call>\n<function=run_shell>\n<parameter=command>\ncurl -s -I http://service.test/\n</parameter>\n</function>\n</tool_call>",
+    "fine_tuned": "<tool_call>\n<function=run_shell>\n<parameter=command>\ncurl -I http://service.test/\n</parameter>\n</function>\n</tool_call>"
+  },
+  {
+    "question": "Avec tshark, lis capture.pcap et affiche les paquets DNS.",
+    "base": "<tool_call>\n<function=run_shell>\n<parameter=command>\ntshark -r capture.pcap -T fields dns | wc -l\n</parameter>\n</function>\n</tool_call>",
+    "fine_tuned": "<tool_call>\n<function=run_shell>\n<parameter=command>\ntshark -r capture.pcap -Y 'dns'\n</parameter>\n</function>\n</tool_call>"
+  },
+  {
+    "question": "Explique en français la différence entre un port fermé et un port filtré dans Nmap.",
+    "base": "En Nmap, la distinction entre un **port fermé** (closed port) et un **port filtré** (filtered port) réside principalement dans la manière dont les ports sont identifiés et classés :\n\n- **Port fermé** : Un port est considéré comme « fermé » lorsqu'aucune connexion n'est active sur lui depuis le réseau externe ou que l'application ne traite pas ce port pour des communications. Dans Nmap, cela correspond à un port qui n'a pas été détecté comme ouvert par le scan. On peut vérifier si un port est fermé en essayant de lancer une connexion TCP au port ; si elle échoue ou est bloquée, le port est fermé.\n\n- **Port filtré** : Les ports sont",
+    "fine_tuned": "<tool_call>\n<function=run_shell>\n<parameter=command>\nnmap -sV -p 8080 --script open-ports\n</parameter>\n</function>\n</tool_call>"
+  }
+]

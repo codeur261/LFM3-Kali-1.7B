@@ -1,0 +1,27 @@
+{
+  "training": {
+    "train_runtime": 3553.3157,
+    "train_samples_per_second": 1.674,
+    "train_steps_per_second": 0.209,
+    "total_flos": 1.234062134194176e+16,
+    "train_loss": 0.5427190606952995,
+    "epoch": 1.0
+  },
+  "evaluation": {
+    "eval_loss": 0.008757544681429863
+  },
+  "peak_gpu_gib": 6.498046875,
+  "base_model": "OpenIntelligenceNet/LFM3-1.7B-Uncensored",
+  "base_revision": "8e7cf5cccd95afa9d34a3a66ebfb8fef1b55c204",
+  "adapter_path": "/content/drive/MyDrive/LFM3_Kali_Finetune/run_20261105_v1/adapter",
+  "tokenization": {
+    "train_examples": 5948,
+    "validation_examples": 313,
+    "input_tokens": 1365622,
+    "supervised_tokens": 283503,
+    "median_length": 200,
+    "max_length": 549,
+    "skipped_train": {},
+    "skipped_validation": {}
+  }
+}

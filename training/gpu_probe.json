@@ -1,0 +1,7 @@
+{
+  "loss": 1.7969930171966553,
+  "seconds": 0.543,
+  "peak_gpu_gib": 4.607,
+  "tokens": 210,
+  "nonzero_gradients_verified": true
+}

@@ -1,0 +1,10 @@
+{
+  "eval_loss": 0.008757544681429863,
+  "eval_runtime": 11.9708,
+  "eval_samples_per_second": 5.346,
+  "eval_steps_per_second": 5.346,
+  "epoch": 1.0,
+  "step": 744,
+  "total_steps": 744,
+  "gpu_gib": 6.5
+}

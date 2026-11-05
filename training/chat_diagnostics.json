@@ -1,0 +1,56 @@
+[
+  {
+    "question": "Explique en français la différence entre un port fermé et un port filtré dans Nmap.",
+    "adapter_chat": {
+      "text": "Dans Nmap, les ports fermés sont ceux qui ne répondent pas à aucune requête ou ne renvoie aucune information sur eux. Les ports filtrés, quant à eux, sont ceux qui peuvent être filtrés par le pare-feu pour bloquer tout trafic entrant ou sortant sur un port spécifique. En utilisant Nmap, vous pouvez effectuer des scans de ports pour identifier les services actifs et les ports filtrés.",
+      "tokens": 92,
+      "seconds": 9.73
+    },
+    "adapter_tools": {
+      "text": "Un port fermé est un port qui n'est pas filtré par le système d'exploitation, tandis qu'un port filtré est un port qui est filtré par le système d'exploitation pour ne permettre que les paquets correspondant à une plage de ports spécifique. Dans Nmap, vous pouvez utiliser la commande `nmap -sV -p 80 --script vuln http/https` pour tester un port filtré.",
+      "tokens": 89,
+      "seconds": 9.18
+    },
+    "base_chat": {
+      "text": "Dans **Nmap**, les ports sont classés selon leur type de filtrage :\n\n- **Port fermé** : c'est le nom du service (ex: 80 pour HTTP, 443 pour HTTPS). Dans Nmap, on peut spécifier `--port 80` ou `--port 443`. Un port « fermé » signifie que le service n'est pas ouvert par défaut sur la machine cible ; il faut vérifier s'il est bien accessible.\n\n- **Port filtré** : c'est un port qui a été filtré par le système d'exploitation ou Nmap. Par exemple, certains services ne sont exposés qu'à des ports spécifiques définis par le pare-feu. Nmap utilise des règles de filtrage (comme TCP/UDP) pour déterminer si un port donné est accessible. On peut utiliser `--tcp-port 22` pour spécifier un port TCP filtré.\n\nEn résumé :\n- **Fermé** = le port correspond à un service connu mais peut être masqué.\n- **Filtré** = le",
+      "tokens": 220,
+      "seconds": 14.28
+    }
+  },
+  {
+    "question": "Dans msfconsole, à quoi servent les commandes help et show options ?",
+    "adapter_chat": {
+      "text": "Les commandes `help` et `show options` dans msfconsole sont utilisées pour afficher des informations sur le programme. La commande `help` fournit une liste de toutes les commandes disponibles, tandis que la commande `show options` affiche les options disponibles pour chaque commande. Ces commandes peuvent être utiles pour comprendre comment utiliser efficacement msfconsole.",
+      "tokens": 77,
+      "seconds": 7.41
+    },
+    "adapter_tools": {
+      "text": "Les commandes `help` et `show options` dans msfconsole affichent respectivement la liste des commandes disponibles et les options de chaque commande. Elles sont utiles pour découvrir rapidement les fonctionnalités du outil.",
+      "tokens": 46,
+      "seconds": 4.81
+    },
+    "base_chat": {
+      "text": "En MSF Console (MSF), **`help`** affiche le menu des sous‑commandes disponibles pour le shell interactif. Il permet de voir rapidement ce que vous pouvez faire depuis votre terminal.\n\n**`show options`** (ou parfois `options`) liste les paramètres optionnels acceptés par chaque commande, ainsi que leurs descriptions. Cela aide à comprendre comment passer des arguments ou configurer le comportement de la commande.\n\nEn résumé :\n- `help` → vue d'ensemble des commandes.\n- `show options` → détails sur les options de chaque commande.",
+      "tokens": 118,
+      "seconds": 7.62
+    }
+  },
+  {
+    "question": "Affiche la version de Nmap. Donne seulement la commande.",
+    "adapter_chat": {
+      "text": "nmap -sV",
+      "tokens": 6,
+      "seconds": 0.62
+    },
+    "adapter_tools": {
+      "text": "<tool_call>\n<function=run_shell>\n<parameter=command>\nnmap -sV\n</parameter>\n</function>\n</tool_call>",
+      "tokens": 22,
+      "seconds": 2.12
+    },
+    "base_chat": {
+      "text": "```bash\nnmap -oA <cible>\n```\nPour afficher la version de Nmap, vous pouvez utiliser `nmap --version`. La commande spécifique dépend du contexte (par exemple, pour lancer nmap avec une cible). Si vous voulez juste voir la version, utilisez :\n```bash\nnmap --version\n```",
+      "tokens": 72,
+      "seconds": 5.17
+    }
+  }
+]
