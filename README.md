@@ -13,6 +13,13 @@ générale. Cette version est publiée pour permettre les évaluations et contri
 - [Contribuer](CONTRIBUTING.md)
 - [Versions et poids entraînés](https://github.com/iamarketings/LFM3-Kali-1.7B/releases)
 
+La publication complète est regroupée dans **ce même dépôt** : `model/` pour
+les poids complets fusionnés, `adapter/` pour l'adaptateur appris et `training/`
+pour les données, fichiers bruts, checkpoints, optimiseur, paramètres et résultats.
+Les gros fichiers sont transportés par Git LFS. Le script `publish_github.py`
+prépare ce dossier puis le pousse directement depuis Colab. Un dossier n'est
+disponible à distance qu'une fois le push vérifié, pas dès sa préparation.
+
 Le modèle entraîné est un adaptateur PEFT : `adapter_model.safetensors`
 contient réellement les poids appris, à charger avec la révision de base ci-dessous.
 Il ne faut pas relancer l'entraînement pour l'utiliser. La fusion en un modèle
