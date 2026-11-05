@@ -1,5 +1,9 @@
 # LFM3-Kali-1.7B
 
+<p align="center">
+  <img src="assets/lfm3-kali.png" alt="Emblème pirate LFM3-KALI" width="640" />
+</p>
+
 ### Un modèle compact spécialisé dans les outils de cybersécurité
 
 LFM3-Kali-1.7B est un projet d'adaptation d'un modèle de langage de 1,7 milliard de paramètres à la génération de commandes Kali Linux et aux appels d'outils structurés. Le projet réunit les poids entraînés, un corpus traçable et un pipeline reproductible de fine-tuning QLoRA.
