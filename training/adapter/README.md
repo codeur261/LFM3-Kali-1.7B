@@ -36,9 +36,9 @@ L'assistant peut être utilisé avec les outils installés sous Kali Linux, ou s
 
 ### Retours d'utilisation locale
 
-Le mainteneur rapporte des essais de sécurité et d'intrusion sur un **HP Gbook 15, processeur Xeon, 4 Go de VRAM et 32 Go de RAM**. Dans cet environnement, il constate que le modèle suit les tâches testées et répond aux besoins de son flux de travail, avec des points à améliorer. Ces essais de terrain complètent les comparaisons Colab ; les traces détaillées, versions du backend, quantification et mesures de débit ne sont pas encore publiées.
+J’ai effectué des tests de sécurité et d’intrusion sur mon **HP Gbook 15, équipé d’un processeur Xeon, de 4 Go de VRAM et de 32 Go de RAM**. Sur les tâches que je lui ai confiées, le modèle suit les étapes et répond aux besoins de mon travail, même si certains points restent à améliorer. Ces essais complètent mes comparaisons sur Colab. Je n’ai pas encore publié les traces détaillées, les paramètres du moteur d’inférence et les mesures de débit.
 
-Une fenêtre de contexte de **64K tokens (65 536)** est retenue comme suffisante pour le flux de travail décrit par le mainteneur. Ce réglage concerne l'inférence et la gestion du cache KV. Il ne garantit pas que 64K tokens remplis tiennent intégralement dans 4 Go de VRAM : la mémoire réellement utilisée dépend du backend, de la quantification du cache, de l'offload vers la RAM et de la longueur occupée. La configuration du modèle autorise jusqu'à 262 144 positions ; la limite de 1 536 tokens utilisée pendant le fine-tuning n'est pas sa limite d'inférence.
+Pour mon flux de travail, une fenêtre de contexte de **64K tokens (65 536)** est suffisante. Ce réglage concerne l'inférence et la gestion du cache KV. Il ne garantit pas que 64K tokens remplis tiennent intégralement dans 4 Go de VRAM : la mémoire réellement utilisée dépend du backend, de la quantification du cache, de l'offload vers la RAM et de la longueur occupée. La configuration du modèle autorise jusqu'à 262 144 positions ; la limite de 1 536 tokens utilisée pendant le fine-tuning n'est pas sa limite d'inférence.
 
 ## Données et paramètres
 
@@ -67,7 +67,7 @@ d'explications. La version v0.1.0 reste à évaluer et améliorer.
 
 MSF est peu représenté : pas de parcours pratique de msfconsole/msfvenom.
 Le corpus n'enseigne pas de boucle complète d'exécution et de retour d'outil.
-Les commandes des comparaisons qualitatives Colab n'ont pas été exécutées ; les essais locaux rapportés par le mainteneur relèvent d'un protocole distinct.
+Les commandes des comparaisons qualitatives Colab n'ont pas été exécutées ; mes essais locaux relèvent d’un protocole distinct.
 Aucun corpus de refus n'a été ajouté ; aucun comportement sans refus n'est garanti.
 
 ## Recharger sans entraîner

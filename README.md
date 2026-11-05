@@ -31,9 +31,9 @@ L'assistant peut être utilisé avec les outils installés sous Kali Linux, ou s
 
 ### Retours d'utilisation locale
 
-Le mainteneur rapporte des essais de sécurité et d'intrusion sur un **HP Gbook 15, processeur Xeon, 4 Go de VRAM et 32 Go de RAM**. Dans cet environnement, il constate que le modèle suit les tâches testées et répond aux besoins de son flux de travail, avec des points à améliorer. Ces essais de terrain complètent les comparaisons Colab ; les traces détaillées, versions du backend, quantification et mesures de débit ne sont pas encore publiées.
+J’ai effectué des tests de sécurité et d’intrusion sur mon **HP Gbook 15, équipé d’un processeur Xeon, de 4 Go de VRAM et de 32 Go de RAM**. Sur les tâches que je lui ai confiées, le modèle suit les étapes et répond aux besoins de mon travail, même si certains points restent à améliorer. Ces essais complètent mes comparaisons sur Colab. Je n’ai pas encore publié les traces détaillées, les paramètres du moteur d’inférence et les mesures de débit.
 
-Une fenêtre de contexte de **64K tokens (65 536)** est retenue comme suffisante pour le flux de travail décrit par le mainteneur. Ce réglage concerne l'inférence et la gestion du cache KV. Il ne garantit pas que 64K tokens remplis tiennent intégralement dans 4 Go de VRAM : la mémoire réellement utilisée dépend du backend, de la quantification du cache, de l'offload vers la RAM et de la longueur occupée. La configuration du modèle autorise jusqu'à 262 144 positions ; la limite de 1 536 tokens utilisée pendant le fine-tuning n'est pas sa limite d'inférence.
+Pour mon flux de travail, une fenêtre de contexte de **64K tokens (65 536)** est suffisante. Ce réglage concerne l'inférence et la gestion du cache KV. Il ne garantit pas que 64K tokens remplis tiennent intégralement dans 4 Go de VRAM : la mémoire réellement utilisée dépend du backend, de la quantification du cache, de l'offload vers la RAM et de la longueur occupée. La configuration du modèle autorise jusqu'à 262 144 positions ; la limite de 1 536 tokens utilisée pendant le fine-tuning n'est pas sa limite d'inférence.
 
 ## Intégration avec DeepSeek Harness
 
@@ -41,7 +41,7 @@ Une fenêtre de contexte de **64K tokens (65 536)** est retenue comme suffisante
 
 Les outils run_shell du corpus et les outils du harness ne sont pas interchangeables par simple déclaration d'URL. Le mode thinking doit être configuré selon le template et le serveur ; les exemples du dépôt utilisent enable_thinking=False. Une configuration de contexte de 64K doit également être supportée par le serveur.
 
-Les essais locaux rapportés ne constituent pas une validation de bout en bout de cette intégration précise. L'absence de trajectoires multi-tours dans une partie du corpus ne permet pas, à elle seule, de conclure que le modèle est incapable de suivre une tâche : ce comportement doit être évalué dans le harness retenu.
+Mes essais locaux ne constituent pas une validation de bout en bout de cette intégration précise. L'absence de trajectoires multi-tours dans une partie du corpus ne permet pas, à elle seule, de conclure que le modèle est incapable de suivre une tâche : ce comportement doit être évalué dans le harness retenu.
 
 Référence officielle : [Configurer une API personnalisée](https://deepseek-harness.github.io/deepseek-harness/en/guide/providers).
 
@@ -161,7 +161,7 @@ L'entraînement de référence a duré **59 min 13 s** sur Tesla T4, avec une m�
 
 Cette dernière mesure porte sur les **64 premiers exemples de validation** et ne constitue pas un score global de compétence. Les tests qualitatifs montrent des améliorations sur certaines commandes Nmap et tshark, ainsi que des erreurs persistantes d'interprétation, de syntaxe et de choix du format de réponse. Les rapports bruts sont conservés dans **training/**.
 
-La version v0.1.0 ne dispose pas encore d'un score d'exécution global sur le jeu de test réservé. Les commandes produites lors des comparaisons qualitatives Colab n'ont pas été exécutées. Les essais de sécurité et d'intrusion rapportés ensuite par le mainteneur sont distingués de ce protocole initial.
+La version v0.1.0 ne dispose pas encore d'un score d'exécution global sur le jeu de test réservé. Les commandes produites lors des comparaisons qualitatives Colab n'ont pas été exécutées. Les tests de sécurité et d’intrusion que j’ai réalisés ensuite sont distincts de ce protocole initial.
 
 ## Périmètre et limites
 
