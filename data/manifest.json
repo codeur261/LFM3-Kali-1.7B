@@ -1,0 +1,62 @@
+{
+  "model_id": "OpenIntelligenceNet/LFM3-1.7B-Uncensored",
+  "model_revision": "8e7cf5cccd95afa9d34a3a66ebfb8fef1b55c204",
+  "seed": 42,
+  "train": 5948,
+  "validation": 313,
+  "heldout": 5294,
+  "training_sources": {
+    "KaliBench": 3329,
+    "HackMentor:explanations": 932,
+    "Cyber-SFT-Agent:first_call_only": 1583,
+    "FR:curated_tool_templates": 104
+  },
+  "rejected": {
+    "hackmentor_unsupported_audit_claim": 3,
+    "duplicate_or_eval_query": 139
+  },
+  "sources": {
+    "kali_train.jsonl": {
+      "url": "https://raw.githubusercontent.com/RISys-Lab/KaliBench/main/KaliBench_data/kalibench_verified_train_3504.jsonl",
+      "sha256": "93dc4ddff6d9df73bed4b9e92716470e7a73df513f5ca2f1b201c85f2329f909",
+      "license": "CC-BY-4.0"
+    },
+    "kali_test.jsonl": {
+      "url": "https://raw.githubusercontent.com/RISys-Lab/KaliBench/main/KaliBench_data/kalibench_verified_test_5000.jsonl",
+      "sha256": "783193aaa98762ca384f028b7a7c309994c879ebf0fc1b781dcb7169fff89afc",
+      "license": "CC-BY-4.0"
+    },
+    "kali_usage.jsonl": {
+      "url": "https://raw.githubusercontent.com/RISys-Lab/KaliBench/main/KaliBench_data/Kali_Tool_Subtools_UsageCode.jsonl",
+      "sha256": "4515fc581d624652297344f036cd7f429e8002356956b7b528220097a60254cd",
+      "license": "See upstream Kali tool documentation"
+    },
+    "agent_train.jsonl": {
+      "url": "https://huggingface.co/datasets/hotdogs/cyber-sft-agent-qwen38/resolve/3f3d5a112b8739dc76e77ff771f3df526ef246a4/train.jsonl",
+      "sha256": "52f3b1ebd0b8e17aa5c74956b8eb9937b93b436b1daa27e58ab9aead94a649d7",
+      "license": "Apache-2.0"
+    },
+    "agent_valid.jsonl": {
+      "url": "https://huggingface.co/datasets/hotdogs/cyber-sft-agent-qwen38/resolve/3f3d5a112b8739dc76e77ff771f3df526ef246a4/valid.jsonl",
+      "sha256": "e7dfdba23fd89552fe73d6cec8e4b7ae29fe9d0f26889a55dd732f6e34e01626",
+      "license": "Apache-2.0"
+    },
+    "agent_test.jsonl": {
+      "url": "https://huggingface.co/datasets/hotdogs/cyber-sft-agent-qwen38/resolve/3f3d5a112b8739dc76e77ff771f3df526ef246a4/test.jsonl",
+      "sha256": "76bf523273834a76b12e3fe8a7e90abb97a1f7ca5a86e24dd20758ee87fecc57",
+      "license": "Apache-2.0"
+    },
+    "hackmentor.json": {
+      "url": "https://raw.githubusercontent.com/tmylla/HackMentor/main/data/seed_generation-14k.json",
+      "sha256": "8f819f6b7336db5cf4404e2b3f54af36daf961c28bdf253da6c4ef09acc5520b",
+      "license": "Apache-2.0 (upstream repository)"
+    }
+  },
+  "notes": [
+    "No commands are executed by data preparation or training.",
+    "Original evaluation splits never enter training.",
+    "Synthetic agent outputs and reasoning traces are excluded; only schema-validated first calls are retained.",
+    "No refusal or safety-alignment corpus is added; no zero-refusal guarantee is made.",
+    "French examples use reserved documentation addresses and are generated from deterministic templates."
+  ]
+}

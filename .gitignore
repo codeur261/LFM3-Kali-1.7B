@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.env
+.env.*
+*.token
+*token*.txt
+raw/
+references/
+checkpoints/
+adapter/
+merged/
+*.safetensors
+*.gguf
+*.pt
+*.bin
+*.zip
+*.tar.gz
