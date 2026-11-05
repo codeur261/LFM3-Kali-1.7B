@@ -162,4 +162,4 @@ Les critères de provenance, de licence et de validation sont décrits dans [CON
 
 Le projet s'appuie sur les travaux de [Liquid AI](https://huggingface.co/LiquidAI), [OpenIntelligenceNet](https://huggingface.co/OpenIntelligenceNet), [KaliBench](https://github.com/RISys-Lab/KaliBench), [HackMentor](https://github.com/tmylla/HackMentor) et [Cyber-SFT-Agent](https://huggingface.co/datasets/hotdogs/cyber-sft-agent-qwen38). La recette d'entraînement s'appuie également sur le [cookbook Liquid4All](https://github.com/Liquid4All/cookbook).
 
-**Maintenance : [Aheshman Itibar — iamarketings](https://github.com/iamarketings).**
+**Maintenance : [Aheshman Itibar — iamarketings](https://github.com/codeur261).**
