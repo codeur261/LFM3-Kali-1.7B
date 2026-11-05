@@ -26,7 +26,7 @@ def artifact_entry(path, root):
 def build_manifest(root):
     root = Path(root).resolve()
     entries = []
-    for folder in ("model", "adapter", "training"):
+    for folder in ("model", "adapter", "training", "gguf"):
         directory = root / folder
         if directory.is_dir():
             for path in sorted(directory.rglob("*")):

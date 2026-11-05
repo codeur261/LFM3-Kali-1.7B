@@ -473,5 +473,30 @@
     "path": "training/validation.jsonl",
     "bytes": 362030,
     "sha256": "3afa6b279fa9498fed61922cfbf88cc79517c19633c2fa183bb639fb535b14cb"
+  },
+  {
+    "path": "gguf/LFM3-Kali-1.7B-Q4_K_M.gguf",
+    "bytes": 1099627040,
+    "sha256": "f8c710c66c3b70f6dfa49fee8cced077c61496eca6ae28d5e8d67567c5216cde"
+  },
+  {
+    "path": "gguf/Modelfile",
+    "bytes": 109,
+    "sha256": "48d7f4ad62f75daca557880d152f44ccd620897a0372d7050d9aa8f7e56d7548"
+  },
+  {
+    "path": "gguf/README.md",
+    "bytes": 2087,
+    "sha256": "90ab3ea4a28909e9b18556e6c1245e571016860bfdb46765604d252d70fc62a0"
+  },
+  {
+    "path": "gguf/SHA256SUMS",
+    "bytes": 93,
+    "sha256": "67f11bcb6f2711ecab0c8b12ed52f19b475af5db29c4babc8ce71e055e9b9eed"
+  },
+  {
+    "path": "gguf/validation.json",
+    "bytes": 2078,
+    "sha256": "81253b5f914d4f39f622a4a7dda3cabede4ab8bee5d31e6df678075a5fe47540"
   }
 ]

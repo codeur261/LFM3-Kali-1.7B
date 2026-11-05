@@ -174,7 +174,7 @@ La version v0.1.0 ne dispose pas encore d'un score d'exécution global sur le je
 - Metasploit est faiblement représenté ; les parcours pratiques msfconsole et msfvenom restent à développer.
 - Le corpus français est limité et ne constitue pas une évaluation linguistique complète.
 - Aucun corpus de refus supplémentaire n'a été ajouté ; le comportement dépend néanmoins de la base et du contexte.
-- La conversion GGUF et la publication de mesures locales reproductibles restent des travaux distincts des retours de terrain.
+- La distribution GGUF Q4_K_M est testée avec Ollama ; les mesures sur les configurations locales restent à documenter.
 
 ## Vérifier les artefacts
 
@@ -202,3 +202,9 @@ Les critères de provenance, de licence et de validation sont décrits dans [CON
 Le projet s'appuie sur les travaux de [Liquid AI](https://huggingface.co/LiquidAI), [OpenIntelligenceNet](https://huggingface.co/OpenIntelligenceNet), [KaliBench](https://github.com/RISys-Lab/KaliBench), [HackMentor](https://github.com/tmylla/HackMentor) et [Cyber-SFT-Agent](https://huggingface.co/datasets/hotdogs/cyber-sft-agent-qwen38). La recette d'entraînement s'appuie également sur le [cookbook Liquid4All](https://github.com/Liquid4All/cookbook).
 
 **Maintenance : [Aheshman Itibar — codeur261](https://github.com/codeur261).**
+
+<!-- OLLAMA-GGUF-START -->
+## Version Ollama disponible
+
+Le modèle fine-tuné est aussi disponible en **GGUF Q4_K_M**, avec Modelfile, empreinte SHA-256 et rapport de test. [Installation et chat local](gguf/README.md). Import et génération vérifiés avec Ollama 0.40.14 ; contexte de test : 4096 tokens.
+<!-- OLLAMA-GGUF-END -->

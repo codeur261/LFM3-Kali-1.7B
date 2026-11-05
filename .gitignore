@@ -11,3 +11,5 @@ __pycache__/
 *.tar.gz
 # model/, adapter/ et training/ sont publiés volontairement.
 # Les poids et états binaires sont gérés par .gitattributes / Git LFS.
+# Distribution GGUF publiée volontairement.
+!/gguf/*.gguf

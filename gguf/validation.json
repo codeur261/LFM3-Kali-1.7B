@@ -1,0 +1,38 @@
+{
+  "source": "aheshman/LFM3-Kali-1.7B",
+  "source_revision": "25e7ba3764faae538b12184de78b80b80501d11d",
+  "llama_cpp_revision": "2ada83079afc79295b3c07bae8a74457c61cba92",
+  "ollama_version": "0.40.14",
+  "quantization": "Q4_K_M",
+  "file": "LFM3-Kali-1.7B-Q4_K_M.gguf",
+  "bytes": 1099627040,
+  "sha256": "f8c710c66c3b70f6dfa49fee8cced077c61496eca6ae28d5e8d67567c5216cde",
+  "context_tested": 4096,
+  "backend_tested": "CPU Colab",
+  "tests": [
+    {
+      "prompt": "Réponds en français : à quoi sert un pare-feu ?",
+      "answer": "Un pare-feu est un système de sécurité informatique qui permet de contrôler le trafic réseau entrant et sortant d'un réseau. Il agit comme une barrière entre les différents réseaux, empêchant ainsi l'accès non autorisé aux ressources du réseau. Le pare-feu peut être configuré pour autoriser ou bloquer certains types de trafic en fonction des règles définies par l'administrateur.",
+      "eval_count": 85,
+      "eval_duration": 33020102000
+    },
+    {
+      "prompt": "Avec tshark, lis capture.pcap et affiche uniquement les paquets DNS. Propose la commande sans l’exécuter.",
+      "answer": "La commande pour utiliser tshark afin de lister uniquement les paquets DNS est `tshark -y -Tdns capture.pcap`. Cette commande affichera tous les paquets DNS dans le fichier capture.pcap.",
+      "eval_count": 50,
+      "eval_duration": 15935770000
+    }
+  ],
+  "note": "Test de chargement et de génération ; aucune commande de cybersécurité exécutée.",
+  "llama_cpp_binary_release": "b12125",
+  "tokenizer_export_compatibility": "TokenizersBackend→PreTrainedTokenizerFast; extra_special_tokens→additional_special_tokens; tokenizer.json and token IDs unchanged",
+  "observed_limitations": [
+    {
+      "test": "tshark DNS",
+      "command_generated": "tshark -y -Tdns capture.pcap",
+      "assessment": "Syntaxe incorrecte : chargement et génération fonctionnels, exactitude de commande non validée.",
+      "expected_example": "tshark -r capture.pcap -Y dns",
+      "commands_executed": false
+    }
+  ]
+}
