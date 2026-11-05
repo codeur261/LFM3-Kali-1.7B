@@ -1,130 +1,165 @@
-# LFM3 — spécialisation aux outils Kali
+# LFM3-Kali-1.7B
 
-**Version v0.1.0 : entraînement terminé, résultats qualitatifs encore imparfaits.**
-5 948 exemples, 744 étapes sur Tesla T4, 59 min 13 s. Les commandes Nmap TCP
-connect et le filtre DNS tshark s'améliorent dans les premiers tests. Des
-explications restent fausses et la version de Nmap est parfois confondue avec
-la détection des versions de services. La faible perte de validation porte sur
-les 64 premiers exemples de validation : elle ne mesure pas une compétence
-générale. Cette version est publiée pour permettre les évaluations et contributions.
+### Un modèle compact spécialisé dans les outils de cybersécurité
 
-- [Guide de publication Hugging Face](PUBLISH_HUGGINGFACE.md)
-- [Fiche du modèle](MODEL_CARD.md)
-- [Contribuer](CONTRIBUTING.md)
-- [Versions et poids entraînés](https://github.com/iamarketings/LFM3-Kali-1.7B/releases)
+LFM3-Kali-1.7B est un projet d'adaptation d'un modèle de langage de 1,7 milliard de paramètres à la génération de commandes Kali Linux et aux appels d'outils structurés. Le projet réunit les poids entraînés, un corpus traçable et un pipeline reproductible de fine-tuning QLoRA.
 
-La publication complète est regroupée dans **ce même dépôt** : `model/` pour
-les poids complets fusionnés, `adapter/` pour l'adaptateur appris et `training/`
-pour les données, fichiers bruts, checkpoints, optimiseur, paramètres et résultats.
-Les gros fichiers sont transportés par Git LFS. Le script `publish_github.py`
-prépare ce dossier puis le pousse directement depuis Colab. Un dossier n'est
-disponible à distance qu'une fois le push vérifié, pas dès sa préparation.
+La version **v0.1.0** est une première version expérimentale ouverte aux évaluations et aux contributions.
 
-Le modèle entraîné est un adaptateur PEFT : `adapter_model.safetensors`
-contient réellement les poids appris, à charger avec la révision de base ci-dessous.
-Il ne faut pas relancer l'entraînement pour l'utiliser. La fusion en un modèle
-autonome et la conversion GGUF sont des étapes distinctes.
+[Fiche du modèle](MODEL_CARD.md) · [Contribuer](CONTRIBUTING.md) · [Publication Hugging Face](PUBLISH_HUGGINGFACE.md)
 
-Modèle de départ : `OpenIntelligenceNet/LFM3-1.7B-Uncensored`, révision
-`8e7cf5cccd95afa9d34a3a66ebfb8fef1b55c204`.
+## Présentation
 
-Exécuter les cellules dans l'ordre avec un GPU T4. Google Drive conserve les
-données préparées, les adaptateurs, l'état de l'optimiseur et les résultats.
-La cellule d'entraînement détecte automatiquement un checkpoint pour reprendre.
-Le téléchargement initial des poids est d'environ 3,46 Go.
+| Élément | Description |
+| --- | --- |
+| Modèle de départ | [OpenIntelligenceNet/LFM3-1.7B-Uncensored](https://huggingface.co/OpenIntelligenceNet/LFM3-1.7B-Uncensored), dérivé de LiquidAI/LFM3-1.7B |
+| Méthode | QLoRA NF4, adaptateurs de rang 16 |
+| Données d'entraînement | 5 948 exemples sélectionnés et dédupliqués |
+| Formats | Modèle complet fusionné FP16 et adaptateur PEFT |
+| Langues des requêtes | Anglais et français |
+| Environnement de référence | Google Colab, NVIDIA Tesla T4 |
 
-## Corpus préparé
+La révision de base est fixée à **8e7cf5cccd95afa9d34a3a66ebfb8fef1b55c204** pour assurer la reproductibilité.
 
-| Source | Exemples d'entraînement | Usage |
+## Organisation du dépôt
+
+Le modèle et les fichiers de formation sont regroupés dans ce dépôt. Les binaires volumineux sont gérés avec **Git LFS**.
+
+| Emplacement | Contenu |
+| --- | --- |
+| model/ | Modèle complet fusionné, poids Safetensors, configuration et tokenizer |
+| adapter/ | Poids LoRA entraînés et configuration PEFT |
+| training/ | Checkpoints, état de l'optimiseur, données préparées, sources brutes et résultats |
+| data/manifest.json | Origine, révisions et empreintes des données |
+| LFM3_Kali_QLoRA_Training.ipynb | Notebook d'entraînement Google Colab |
+| prepare_data.py | Préparation et filtrage du corpus |
+| train_model.py | Entraînement QLoRA et reprise des checkpoints |
+| test_after_training.py | Comparaison qualitative avec le modèle de base |
+| publish_github.py | Export et publication depuis Colab |
+| publish_hf.py | Publication de l'adaptateur sur Hugging Face |
+| PUBLICATION_MANIFEST.json | Inventaire et empreintes SHA-256 des artefacts |
+
+## Démarrage rapide
+
+### Récupérer les poids
+
+Installer [Git LFS](https://git-lfs.com/), puis cloner le dépôt. Le téléchargement sélectif récupère uniquement le modèle complet ; les fichiers de formation restent disponibles séparément.
+
+~~~bash
+GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/iamarketings/LFM3-Kali-1.7B.git
+cd LFM3-Kali-1.7B
+git lfs install --local
+git lfs pull --include="model/**"
+~~~
+
+Le modèle complet occupe environ **3,48 Go sur disque**. La mémoire d'inférence dépend de la précision, du contexte et du backend.
+
+### Générer une réponse
+
+L'exemple suivant utilise un GPU NVIDIA et un chargement en 4 bits. PyTorch doit être installé avec une version CUDA compatible avec le matériel utilisé.
+
+~~~bash
+python -m pip install "transformers==5.20.2" "accelerate==1.15.0" "bitsandbytes==0.50.2"
+~~~
+
+~~~python
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+
+model_path = "./model"
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(
+    model_path,
+    trust_remote_code=True,
+    dtype=torch.float16,
+    device_map={"": 0},
+    quantization_config=BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_compute_dtype=torch.float16,
+    ),
+).eval()
+
+messages = [{
+    "role": "user",
+    "content": "Avec tshark, lis capture.pcap et affiche les paquets DNS.",
+}]
+prompt = tokenizer.apply_chat_template(
+    messages, tokenize=False, add_generation_prompt=True, enable_thinking=False,
+)
+inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=False).to("cuda")
+with torch.inference_mode():
+    generated = model.generate(
+        **inputs, max_new_tokens=160, do_sample=False, use_cache=True,
+        pad_token_id=tokenizer.eos_token_id,
+    )
+print(tokenizer.decode(generated[0, inputs.input_ids.shape[1]:], skip_special_tokens=True))
+~~~
+
+Ce programme génère une réponse textuelle ; il n'exécute pas les commandes proposées. Le chargement de l'adaptateur sur la base d'origine est décrit dans la [fiche du modèle](MODEL_CARD.md).
+
+## Données
+
+| Source | Exemples | Utilisation |
 | --- | ---: | --- |
-| KaliBench, GitHub RISys-Lab | 3 329 | Demande vers commande Kali/Linux |
-| Cyber-SFT-Agent | 1 583 | Premier appel d'outil et arguments validés |
-| HackMentor, GitHub tmylla | 932 | Explications de cybersécurité |
-| Gabarits français documentés | 104 | Demandes françaises et commandes de base |
+| [KaliBench](https://github.com/RISys-Lab/KaliBench) | 3 329 | Requêtes et commandes Kali/Linux |
+| [Cyber-SFT-Agent](https://huggingface.co/datasets/hotdogs/cyber-sft-agent-qwen38) | 1 583 | Premier appel d'outil et arguments structurés |
+| [HackMentor](https://github.com/tmylla/HackMentor) | 932 | Explications de cybersécurité |
+| Gabarits français du projet | 104 | Commandes et requêtes de base |
 | **Total** | **5 948** | |
 
-313 exemples de validation et 5 294 exemples réservés à l'évaluation sont
-séparés. Aucun exemple du test original KaliBench n'entre dans l'entraînement.
-Les requêtes identiques sont dédupliquées entre les ensembles. Les sorties
-synthétiques et raisonnements de Cyber-SFT-Agent sont exclus ; le premier
-appel d'outil est conservé seulement si son schéma et ses arguments concordent.
-La validation syntaxique n'est pas une preuve que toute commande fonctionnera
-dans une installation Kali donnée.
+Le corpus comprend également **313 exemples de validation** et **5 294 exemples réservés à l'évaluation**. Les requêtes identiques sont exclues entre les ensembles. Pour Cyber-SFT-Agent, seul le premier appel d'outil est retenu, après vérification du schéma et des arguments ; les sorties synthétiques et les raisonnements intermédiaires sont exclus.
 
-Les 2 809 extraits de documentation d'outils sont livrés séparément pour un RAG
-ultérieur. Ils ne sont pas présentés comme des résultats d'exécution.
+Une collection distincte de **2 809 extraits de documentation** est fournie pour des travaux de recherche documentaire. Elle n'est pas utilisée comme un corpus de résultats d'exécution. Les sources, licences et empreintes sont consignées dans le [manifeste](data/manifest.json).
 
-## Entraînement
+## Reproduire l'entraînement
 
-- QLoRA NF4, rang 16, alpha 32, dropout 0,05.
-- 16 105 472 paramètres entraînables, soit 0,923 % du modèle chargé.
-- Batch 1, accumulation 8, une époque, taux d'apprentissage 0,0001.
-- Limite 1 536 tokens. Le plus long exemple préparé mesure 549 tokens avec le
-  tokenizer utilisé ; aucun exemple n'a dû être tronqué ou écarté pour sa taille.
-- 1 365 622 tokens d'entrée et 283 503 tokens assistant supervisés.
-- Format natif LFM3, appels d'outils structurés et mode thinking désactivé.
-- T4 : calcul FP16, adaptateurs FP32, gradient checkpointing ; l'échelle AMP
-  initiale est réduite à 128 pour éviter le débordement observé à 65 536.
-- Contrôle forward/backward réel avant le long calcul ; arrêt sur perte ou
-  gradients non finis.
-- Sauvegarde à l'étape 5, puis toutes les 50 étapes ; trois points conservés.
+Ouvrir [le notebook dans Google Colab](https://colab.research.google.com/github/iamarketings/LFM3-Kali-1.7B/blob/main/LFM3_Kali_QLoRA_Training.ipynb), sélectionner un GPU et exécuter les cellules dans l'ordre. Le pipeline vérifie le matériel et les gradients avant le calcul. Les checkpoints permettent une reprise après interruption.
 
-L'entraînement complet a été exécuté sur Tesla T4 : 744 étapes, 3 553,3157 s,
-perte moyenne 0,542719 et mémoire réservée maximale 6,498 Gio. La perte finale
-sur le sous-ensemble de validation est 0,008758. Les contrôles qualitatifs
-révèlent des erreurs malgré cette perte faible ; aucun score global de maîtrise
-des outils n'est revendiqué.
+| Paramètre | Valeur |
+| --- | --- |
+| Adaptateurs | LoRA, rang 16, alpha 32, dropout 0,05 |
+| Paramètres entraînables | 16 105 472 |
+| Quantification | NF4, double quantification |
+| Calcul | FP16, gradient checkpointing |
+| Batch / accumulation | 1 / 8 |
+| Taux d'apprentissage initial | 1 × 10⁻⁴ |
+| Durée | 1 époque, 744 étapes |
+| Limite de séquence | 1 536 tokens |
+| Tokens d'entrée / supervisés | 1 365 622 / 283 503 |
 
-Aucun corpus de refus ou d'alignement supplémentaire n'est ajouté. Cela ne
-garantit pas l'absence totale de refus, d'erreurs ou de régressions. Le contrôle
-qualitatif final compare le modèle de départ et l'adaptateur sur les mêmes
-questions, sans exécuter les commandes proposées.
+Environnement de référence : PyTorch 2.11.0, Transformers 5.20.2, PEFT 0.21.2, Accelerate 1.15.0 et BitsAndBytes 0.50.2.
 
-## Résultats
+## Évaluation
 
-`Google Drive/MyDrive/LFM3_Kali_Finetune/run_20261105_v1/` contient :
+L'entraînement de référence a duré **59 min 13 s** sur Tesla T4, avec une mémoire GPU réservée maximale de **6,50 Gio**. La perte moyenne d'entraînement est de 0,542719 et la perte finale de validation de 0,008758.
 
-- `manifest.json` et les données préparées ;
-- `gpu_probe.json`, `tokenization.json`, `progress.json` ;
-- `checkpoints/checkpoint-*/` pour la reprise ;
-- `adapter/` après entraînement, `result.json` et `qualitative_tests.json`.
+Cette dernière mesure porte sur les **64 premiers exemples de validation** et ne constitue pas un score global de compétence. Les tests qualitatifs montrent des améliorations sur certaines commandes Nmap et tshark, ainsi que des erreurs persistantes d'interprétation, de syntaxe et de choix du format de réponse. Les rapports bruts sont conservés dans **training/**.
 
-Le dossier `adapter/` doit être utilisé avec la même révision du modèle de base.
-La fusion puis la conversion GGUF sont des opérations distinctes pour le
-déploiement local ; ce dossier contient les adaptateurs d'entraînement.
+La version v0.1.0 ne dispose pas encore d'un score d'exécution global sur le jeu de test réservé. Les commandes produites lors des comparaisons qualitatives n'ont pas été exécutées.
 
-## Sources et attribution
+## Périmètre et limites
 
-- Pengfei Li, Naufal Suryanto, Sicheng Zhang, Muzammal Naseer, **KaliBench**,
-  https://github.com/RISys-Lab/KaliBench — données vérifiées CC BY 4.0.
-- Jie Zhang, Hui Wen, Liting Deng, Mingfeng Xin, Zhi Li, Lun Li, Hongsong Zhu,
-  Limin Sun, **HackMentor: Fine-tuning Large Language Models for Cybersecurity**,
-  IEEE TrustCom 2023 — https://github.com/tmylla/HackMentor, dépôt Apache 2.0.
-- **Cyber-SFT-Agent**, hotdogs, v3.1,
-  https://huggingface.co/datasets/hotdogs/cyber-sft-agent-qwen38 — Apache 2.0.
-- Recette de référence LFM3 SFT : https://github.com/Liquid4All/cookbook.
+- La spécialisation concerne principalement la proposition de commandes et le premier appel d'outil.
+- Le corpus ne couvre pas une boucle agent complète avec exécution, retour d'outil et correction.
+- Metasploit est faiblement représenté ; les parcours pratiques msfconsole et msfvenom restent à développer.
+- Le corpus français est limité et ne constitue pas une évaluation linguistique complète.
+- Aucun corpus de refus supplémentaire n'a été ajouté ; le comportement dépend néanmoins de la base et du contexte.
+- La conversion GGUF et les mesures sur des configurations locales constituent des travaux distincts.
 
-Les URL exactes et SHA-256 de chaque fichier sont inscrits dans le manifeste.
-Le corpus restreint CyberAgentTrace n'est pas utilisé.
+## Contribuer
 
-MSF est peu couvert : 21 exemples de commandes liés à MSF/Armitage et quatre
-mentions théoriques, sans exemples pratiques assistant `msfconsole` ou
-`msfvenom`. Les définitions d'outils présentes dans une palette ne sont pas
-comptées comme exemples d'utilisation.
+Les contributions sont ouvertes via les [issues](https://github.com/iamarketings/LFM3-Kali-1.7B/issues) et les [pull requests](https://github.com/iamarketings/LFM3-Kali-1.7B/pulls). Les priorités concernent l'évaluation indépendante, la qualité des données, la couverture des outils et les réponses en français.
 
-Le code original du projet est sous licence MIT (`LICENSE`). Les poids
-dérivent de LiquidAI et restent soumis à la LFM Open License v1.0
-(`LICENSE-LFM`). Les jeux de données conservent leurs licences et attributions
-propres, détaillées dans `data/manifest.json`.
+Les critères de provenance, de licence et de validation sont décrits dans [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Sauvegarde GitHub
+## Licences et crédits
 
-Le dépôt privé peut conserver ce code, le notebook et les fichiers JSONL du
-dossier `data/`, avec leurs sources et empreintes. Les fichiers d'entraînement
-bruts sont récupérables depuis le manifeste et ne sont pas dupliqués dans Git.
+- **Code original et documentation du projet** : [licence MIT](LICENSE).
+- **Poids du modèle et dérivés** : [LFM Open License v1.0](LICENSE-LFM).
+- **Données et documentation tierces** : licences propres aux sources, détaillées dans le manifeste.
 
-Les adaptateurs LoRA et les archives de checkpoints doivent être attachés aux
-GitHub Releases du projet, plutôt qu'ajoutés à chaque commit. Les poids du
-modèle de départ sont téléchargés depuis leur dépôt public à la réutilisation.
-L'entraînement actuellement lancé conserve ses checkpoints sur Drive ; aucun
-de ces fichiers ne doit être effacé avant la vérification de sa copie distante.
+Le projet s'appuie sur les travaux de [Liquid AI](https://huggingface.co/LiquidAI), [OpenIntelligenceNet](https://huggingface.co/OpenIntelligenceNet), [KaliBench](https://github.com/RISys-Lab/KaliBench), [HackMentor](https://github.com/tmylla/HackMentor) et [Cyber-SFT-Agent](https://huggingface.co/datasets/hotdogs/cyber-sft-agent-qwen38). La recette d'entraînement s'appuie également sur le [cookbook Liquid4All](https://github.com/Liquid4All/cookbook).
+
+**Maintenance : [Aheshman Itibar — iamarketings](https://github.com/iamarketings).**
